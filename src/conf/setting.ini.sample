@@ -1,0 +1,8 @@
+[DEFAULT]
+Host = connect_host
+Port = use_port
+User = ssh_connect_user
+KeyFile = path_of_key_file
+PassPhrase = pass_phrase_of_key
+TargetFile = /path/of/fetch/target/file
+ToFile = /fetch/file/as
