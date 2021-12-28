@@ -60,3 +60,15 @@ class Config():
         section = 'DEFAULT'
         key = 'ToFile'
         return self._parser.get(section, key)
+
+    @property
+    def target_dir(self):
+        section = 'DEFAULT'
+        key = 'TargetDir'
+        return self._parser.get(section, key)
+
+    @property
+    def to_dir(self):
+        section = 'DEFAULT'
+        key = 'ToDir'
+        return self._parser.get(section, key)
