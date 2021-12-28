@@ -1,4 +1,7 @@
+from os import remove
+
 import paramiko
+
 from config import Config
 
 
@@ -19,8 +22,12 @@ def main():
     )
 
     # sftpセッション
-    with ssh.open_sftp() as connection:
-        connection.get(config.target_file, config.to_file)
+    try:
+        with ssh.open_sftp() as connection:
+            connection.get(config.target_file, config.to_file)
+    except FileNotFoundError as ex:
+        print('fetch対象ファイルがありません。 {}'.format(config.target_file))
+        remove(config.to_file)
 
 
 if __name__ == '__main__':
