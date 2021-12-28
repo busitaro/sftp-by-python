@@ -4,7 +4,19 @@ from ssh import Ssh
 from config import Config
 
 
-def fetch_all(ssh: Ssh):
+def fetch_all(ssh: Ssh, delete: bool = False):
+    """
+    SSHサーバ上の指定ディレクトリから
+    すべてのファイルを取得する
+
+    Params
+    ---------
+    ssh: Ssh
+        ssh生成オブジェクト
+    delete: bool
+        取得ファイルをサーバから取得するかのフラグ
+
+    """
     config = Config()
     dir_path = config.target_dir
 
@@ -23,6 +35,9 @@ def fetch_all(ssh: Ssh):
                     '{}/{}'.format(dir_path, attr.filename),
                     '{}/{}'.format(config.to_dir, attr.filename)
                 )
+                if delete:
+                    # ファイルの削除
+                    connection.remove('{}/{}'.format(dir_path, attr.filename))
 
 
 def main():
