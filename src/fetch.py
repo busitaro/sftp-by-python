@@ -1,33 +1,25 @@
 from os import remove
 
-import paramiko
-
+from ssh import Ssh
 from config import Config
 
 
-def main():
+def fetch(ssh: Ssh):
     config = Config()
-
-    rsa_key = paramiko.RSAKey.from_private_key_file(
-        config.key_file, config.pass_phrase
-    )
-
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(
-        config.host,
-        config.port,
-        config.user,
-        pkey=rsa_key
-    )
 
     # sftpセッション
     try:
-        with ssh.open_sftp() as connection:
+        connect = ssh.create_ssh_connect()
+        with connect.open_sftp() as connection:
             connection.get(config.target_file, config.to_file)
-    except FileNotFoundError as ex:
+    except FileNotFoundError:
         print('fetch対象ファイルがありません。 {}'.format(config.target_file))
         remove(config.to_file)
+
+
+def main():
+    ssh = Ssh()
+    fetch(ssh)
 
 
 if __name__ == '__main__':
